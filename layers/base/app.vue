@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+const { setLocale } = useI18n()
+
+setLocale('cs')
+</script>
+
 <template>
   <div>
     <NuxtLoadingIndicator />
