@@ -6,7 +6,7 @@ const cs: Locale = {
   },
   common: {
     ok: 'OK',
-    next: 'Další',
+    next: 'Pokračovat',
     back: 'Zpět',
     submit: 'Odeslat',
     cancel: 'Zrušit',

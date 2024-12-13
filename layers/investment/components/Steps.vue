@@ -64,11 +64,10 @@ const {
       </UFormGroup>
     </div>
     <template #footer>
-      <div class="grid grid-cols-3 gap-2 place-items-center">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 place-items-center">
         <UButton
           v-if="step === 'details'"
           class="place-self-start"
-          icon="i-heroicons-arrow-path"
           color="gray"
           @click="handleResetForms"
         >
@@ -77,13 +76,12 @@ const {
         <UButton
           v-else
           class="place-self-start"
-          icon="i-heroicons-arrow-left"
           color="gray"
           @click="goBack"
         >
           {{ $t('common.back') }}
         </UButton>
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-1 row-start-2 col-span-2 md:row-start-1 md:col-span-1 md:col-start-2">
           <div
             v-for="i in 4"
             :key="`step-indicator-${i}`"
@@ -97,8 +95,7 @@ const {
         </div>
         <UButton
           v-if="step !== 'address'"
-          class="place-self-end"
-          icon="i-heroicons-arrow-right"
+          class="place-self-center ml-auto"
           trailing
           @click="goNext"
         >
@@ -106,7 +103,7 @@ const {
         </UButton>
         <UButton
           v-else
-          class="place-self-end"
+          class="place-self-center ml-auto"
           color="primary"
           :loading="submitting"
           @click="handleSubmit"
