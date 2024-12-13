@@ -34,5 +34,6 @@ export default defineNuxtConfig({
       name: 'English',
     }],
     vueI18n: './i18n.config.ts',
+    detectBrowserLanguage: false,
   },
 })
