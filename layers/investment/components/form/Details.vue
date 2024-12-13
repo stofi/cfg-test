@@ -1,44 +1,15 @@
 <script lang="ts" setup>
-import { z } from 'zod'
-import { useDetailsStore } from '~investment/stores/details'
-import type { FormSubmitEvent, Form } from '#ui/types'
+import type { Form } from '#ui/types'
+import { MIN_AMOUNT, MAX_AMOUNT } from '~investment/consts'
 
-const formatter = new Intl.NumberFormat('cs-CZ', {
-  style: 'currency',
-  currency: 'CZK',
-})
+const detailsStore = useDetailsStore()
+const { detailsSchema } = useInvestmentSchemas()
 
-const minAmount = 1000
-const maxAmount = 1000000
-
-const { t } = useI18n()
-const state = useDetailsStore()
-
-const formSchema = computed(() =>
-  z.object({
-    amount: z
-      .number({
-        errorMap: () => ({
-          message: t('forms.validations.amount.number'),
-        }),
-      })
-      .int()
-      .min(minAmount, t('forms.validations.amount.min', { min: minAmount }))
-      .max(maxAmount, t('forms.validations.amount.max', { max: maxAmount })),
-  }),
-)
-
-export type FormState = Partial<z.infer<typeof formSchema['value']>>
-
-const form = ref<Form<FormState>>()
-
-const handleSubmit = (event: FormSubmitEvent<FormState>) => {
-  console.log(event)
-}
+const form = ref<Form<DetailsSchema>>()
 
 const validate = async () => form.value?.validate()
   .then(Boolean)
-  .catch(() => false)
+  .catch(() => false) ?? false
 
 defineExpose({
   validate,
@@ -48,10 +19,9 @@ defineExpose({
 <template>
   <UForm
     ref="form"
-    :state="state"
-    :schema="formSchema"
+    :state="detailsStore"
+    :schema="detailsSchema"
     class="grid gap-6"
-    @submit="handleSubmit"
   >
     <InvestmentStepHeader
       :title="$t('forms.steps.details.title')"
@@ -62,19 +32,19 @@ defineExpose({
       name="amount"
     >
       <UInput
-        v-model.number="state.amount"
+        v-model.number="detailsStore.amount"
         type="text"
-        :formatter="formatter.format"
+        :formatter="formatCurrency.format"
       />
       <URange
-        v-model="state.amount"
+        v-model="detailsStore.amount"
         class="mt-2"
-        :min="minAmount"
-        :max="maxAmount"
+        :min="MIN_AMOUNT"
+        :max="MAX_AMOUNT"
       />
       <div class="flex justify-between text-xs text-gray-500">
-        <span>{{ formatter.format(minAmount) }}</span>
-        <span>{{ formatter.format(maxAmount) }}</span>
+        <span>{{ formatCurrency.format(MIN_AMOUNT) }}</span>
+        <span>{{ formatCurrency.format(MAX_AMOUNT) }}</span>
       </div>
     </UFormGroup>
   </uform>

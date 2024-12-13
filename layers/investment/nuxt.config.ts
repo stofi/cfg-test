@@ -7,4 +7,7 @@ export default defineNuxtConfig({
     { path: '~investment/components', prefix: 'Investment' },
   ],
   alias: { '~investment': resolve('./') },
+  pinia: {
+    storesDirs: [resolve('./stores')],
+  },
 })

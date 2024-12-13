@@ -12,7 +12,7 @@ useHead({
 </script>
 
 <template>
-  <div class="grid items-center gap-4 md:flex-grow md:grid-cols-2">
+  <BasePageGrid>
     <div>
       <h1 class="text-2xl font-bold">
         {{ $t('pages.investment.title') }}
@@ -20,5 +20,6 @@ useHead({
       <p>{{ $t('pages.investment.description') }}</p>
     </div>
     <InvestmentSteps />
-  </div>
+    <InvestmentContinueModal />
+  </BasePageGrid>
 </template>

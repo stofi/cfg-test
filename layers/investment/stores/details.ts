@@ -1,8 +1,9 @@
-import type { FormState } from '../components/form/Details.vue'
-
 export const useDetailsStore = defineStore('details', {
-  state: (): FormState => ({
+  state: (): DetailsSchema => ({
     amount: undefined,
   }),
+  getters: {
+    hasData: state => state.amount !== undefined,
+  },
   persist: true,
 })

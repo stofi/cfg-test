@@ -12,8 +12,20 @@ useHead({
 </script>
 
 <template>
-  <h2 class="text-2xl font-bold">
-    {{ $t('app.title') }}
-  </h2>
-  <div>{{ $t('pages.index.description') }}</div>
+  <BasePageGrid>
+    <div>
+      <h2 class="text-2xl font-bold">
+        {{ $t('app.title') }}
+      </h2>
+      <div>{{ $t('pages.index.description') }}</div>
+      <UButton
+        to="/investment"
+        class="mt-4"
+        size="xl"
+        icon="i-heroicons-currency-dollar"
+      >
+        {{ $t('pages.index.cta') }}
+      </UButton>
+    </div>
+  </BasePageGrid>
 </template>

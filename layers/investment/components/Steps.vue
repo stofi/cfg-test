@@ -1,45 +1,21 @@
 <script lang="ts" setup>
-import type InvestmentFormDetails from './form/Details.vue'
-import type InvestmentFormPersonal from './form/Personal.vue'
-import type InvestmentFormContact from './form/Contact.vue'
-import type InvestmentFormAddress from './form/Address.vue'
-
-const step = ref(1)
-
-const detailsForm = ref<ComponentPublicInstance<typeof InvestmentFormDetails>>()
-const personalForm = ref<ComponentPublicInstance<typeof InvestmentFormPersonal>>()
-const contactForm = ref<ComponentPublicInstance<typeof InvestmentFormContact>>()
-const addressForm = ref<ComponentPublicInstance<typeof InvestmentFormAddress>>()
-
-const validateStep = async () => {
-  switch (step.value) {
-    case 1:
-      return await detailsForm.value?.validate()
-    case 2:
-      return await personalForm.value?.validate()
-    case 3:
-      return await contactForm.value?.validate()
-    case 4:
-      return await addressForm.value?.validate()
-    default:
-      return false
-  }
-}
-
-const goBack = () => {
-  step.value = Math.max(1, step.value - 1)
-}
-
-const goNext = async () => {
-  // check if the current step is valid
-  const isValid = await validateStep()
-  if (!isValid) {
-    return
-  }
-
-  // go to the next step
-  step.value = Math.min(4, step.value + 1)
-}
+const {
+  step,
+  stepNumber,
+  detailsFormRef,
+  personalFormRef,
+  contactFormRef,
+  addressFormRef,
+  goBack,
+  goNext,
+  handleSubmit,
+  handleResetForms,
+  consent,
+  showConsentWarning,
+  submitting,
+  showSuccessModal,
+  showErrorModal,
+} = useInvestmentSteps()
 </script>
 
 <template>
@@ -57,31 +33,52 @@ const goNext = async () => {
       <p>{{ $t('pages.investment.form.description') }}</p>
     </template>
 
-    <div
-      v-auto-animate
-    >
+    <div v-auto-animate>
       <InvestmentFormDetails
-        v-if="step===1"
-        ref="detailsForm"
+        v-if="step === 'details'"
+        ref="detailsFormRef"
       />
       <InvestmentFormPersonal
-        v-if="step===2"
-        ref="personalForm"
+        v-if="step === 'personal'"
+        ref="personalFormRef"
       />
       <InvestmentFormContact
-        v-if="step===3"
-        ref="contactForm"
+        v-if="step === 'contact'"
+        ref="contactFormRef"
       />
       <InvestmentFormAddress
-        v-if="step===4"
-        ref="addressForm"
+        v-if="step === 'address'"
+        ref="addressFormRef"
       />
+      <UFormGroup
+        v-if="step === 'address'"
+        class="mt-4"
+        name="consent"
+        :error="showConsentWarning ? $t('forms.validations.consent.required') : undefined"
+      >
+        <UCheckbox
+          v-model="consent"
+          name="notifications"
+          :label="$t('forms.fields.consent.label')"
+        />
+      </UFormGroup>
     </div>
     <template #footer>
       <div class="grid grid-cols-3 gap-2 place-items-center">
         <UButton
+          v-if="step === 'details'"
+          class="place-self-start"
+          icon="i-heroicons-arrow-path"
+          color="gray"
+          @click="handleResetForms"
+        >
+          {{ $t('common.reset') }}
+        </UButton>
+        <UButton
+          v-else
           class="place-self-start"
           icon="i-heroicons-arrow-left"
+          color="gray"
           @click="goBack"
         >
           {{ $t('common.back') }}
@@ -92,13 +89,14 @@ const goNext = async () => {
             :key="`step-indicator-${i}`"
             class="w-2 h-2 rounded-full"
             :class="{
-              'bg-gray-600 dark:bg-gray-500': i < step,
-              'bg-primary': i=== step,
-              'bg-gray-400 dark:bg-gray-700': i > step,
+              'bg-gray-600 dark:bg-gray-500': i < stepNumber,
+              'bg-primary': i === stepNumber,
+              'bg-gray-400 dark:bg-gray-700': i > stepNumber,
             }"
           />
         </div>
         <UButton
+          v-if="step !== 'address'"
           class="place-self-end"
           icon="i-heroicons-arrow-right"
           trailing
@@ -106,7 +104,19 @@ const goNext = async () => {
         >
           {{ $t('common.next') }}
         </UButton>
+        <UButton
+          v-else
+          class="place-self-end"
+          color="primary"
+          :loading="submitting"
+          @click="handleSubmit"
+        >
+          {{ $t('common.submit') }}
+        </UButton>
       </div>
     </template>
   </UCard>
+
+  <InvestmentSuccessModal v-model="showSuccessModal" />
+  <InvestmentErrorModal v-model="showErrorModal" />
 </template>

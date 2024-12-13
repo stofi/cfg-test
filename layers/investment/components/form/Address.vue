@@ -1,38 +1,14 @@
 <script lang="ts" setup>
-import { z } from 'zod'
-import { useAddressStore } from '~investment/stores/address'
-import type { FormSubmitEvent, Form } from '#ui/types'
+import type { Form } from '#ui/types'
 
-const { t } = useI18n()
+const addressStore = useAddressStore()
+const { addressSchema } = useInvestmentSchemas()
 
-const formSchema = computed(() =>
-  z.object({
-    city: z
-      .string()
-      .min(1, t('forms.validations.city.required')),
-    street: z
-      .string()
-      .min(1, t('forms.validations.street.required')),
-    zipCode: z
-      .string()
-      .length(5, t('forms.validations.zipCode.length')),
-  }),
-)
+const form = ref<Form<AddressSchema>>()
 
-export type FormState = Partial<z.infer<typeof formSchema['value']>>
-
-const state = useAddressStore()
-
-const form = ref<Form<FormState>>()
-
-const handleSubmit = (event: FormSubmitEvent<FormState>) => {
-  console.log(event)
-}
-
-const validate = async () => {
-  const isValid = await form.value?.validate()
-  return !!isValid
-}
+const validate = async () => form.value?.validate()
+  .then(Boolean)
+  .catch(() => false) ?? false
 
 defineExpose({
   validate,
@@ -42,10 +18,9 @@ defineExpose({
 <template>
   <UForm
     ref="form"
-    :state="state"
-    :schema="formSchema"
+    :state="addressStore"
+    :schema="addressSchema"
     class="grid gap-6"
-    @submit="handleSubmit"
   >
     <InvestmentStepHeader
       :title="$t('forms.steps.address.title')"
@@ -56,7 +31,7 @@ defineExpose({
       name="city"
     >
       <UInput
-        v-model="state.city"
+        v-model="addressStore.city"
         type="text"
       />
     </UFormGroup>
@@ -65,7 +40,7 @@ defineExpose({
       name="street"
     >
       <UInput
-        v-model="state.street"
+        v-model="addressStore.street"
         type="text"
       />
     </UFormGroup>
@@ -74,7 +49,7 @@ defineExpose({
       name="zipCode"
     >
       <UInput
-        v-model="state.zipCode"
+        v-model="addressStore.zipCode"
         type="text"
       />
     </UFormGroup>

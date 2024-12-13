@@ -1,35 +1,14 @@
 <script lang="ts" setup>
-import { z } from 'zod'
-import { useContactStore } from '~investment/stores/contact'
-import type { FormSubmitEvent, Form } from '#ui/types'
+import type { Form } from '#ui/types'
 
-const { t } = useI18n()
+const contactStore = useContactStore()
+const { contactSchema } = useInvestmentSchemas()
 
-const formSchema = computed(() =>
-  z.object({
-    phoneNumber: z
-      .string()
-      .length(9, t('forms.validations.phoneNumber.length')),
-    email: z
-      .string()
-      .email(t('forms.validations.email.valid')),
-  }),
-)
+const form = ref<Form<ContactSchema>>()
 
-export type FormState = Partial<z.infer<typeof formSchema['value']>>
-
-const state = useContactStore()
-
-const form = ref<Form<FormState>>()
-
-const handleSubmit = (event: FormSubmitEvent<FormState>) => {
-  console.log(event)
-}
-
-const validate = async () => {
-  const isValid = await form.value?.validate()
-  return !!isValid
-}
+const validate = async () => form.value?.validate()
+  .then(Boolean)
+  .catch(() => false) ?? false
 
 defineExpose({
   validate,
@@ -39,10 +18,9 @@ defineExpose({
 <template>
   <UForm
     ref="form"
-    :state="state"
-    :schema="formSchema"
+    :state="contactStore"
+    :schema="contactSchema"
     class="grid gap-6"
-    @submit="handleSubmit"
   >
     <InvestmentStepHeader
       :title="$t('forms.steps.contact.title')"
@@ -53,7 +31,7 @@ defineExpose({
       name="phoneNumber"
     >
       <UInput
-        v-model="state.phoneNumber"
+        v-model="contactStore.phoneNumber"
         type="text"
       />
     </UFormGroup>
@@ -62,7 +40,7 @@ defineExpose({
       name="email"
     >
       <UInput
-        v-model="state.email"
+        v-model="contactStore.email"
         type="email"
       />
     </UFormGroup>

@@ -5,6 +5,7 @@ const cs: Locale = {
     title: 'Investiční platforma',
   },
   common: {
+    ok: 'OK',
     next: 'Další',
     back: 'Zpět',
     submit: 'Odeslat',
@@ -12,11 +13,13 @@ const cs: Locale = {
     confirm: 'Potvrdit',
     continuePrevious: 'Chcete pokračovat s předchozím záznamem?',
     error: 'Došlo k chybě. Zkuste to prosím znovu.',
+    reset: 'Začít znovu',
   },
   pages: {
     index: {
       title: 'Úvodní stránka',
       description: 'Investujte chytře.',
+      cta: 'Začít investovat',
     },
     investment: {
       title: 'Investice',
@@ -33,6 +36,14 @@ const cs: Locale = {
       body: 'Zdá se, že máte nedokončený záznam. Chcete pokračovat tam, kde jste skončili?',
       confirm: 'Ano, pokračovat',
       cancel: 'Ne, začít znovu',
+    },
+    success: {
+      title: 'Děkujeme',
+      body: 'Vaše investice byla úspěšně odeslána. Brzy vás budeme kontaktovat.',
+    },
+    error: {
+      title: 'Chyba',
+      body: 'Při odesílání vaší investice došlo k chybě. Zkuste to prosím znovu později.',
     },
   },
   forms: {
@@ -82,6 +93,9 @@ const cs: Locale = {
       zipCode: {
         label: 'PSČ',
       },
+      consent: {
+        label: 'Souhlasím se zpracováním svých osobních údajů.',
+      },
     },
     validations: {
       amount: {
@@ -112,6 +126,9 @@ const cs: Locale = {
       },
       zipCode: {
         length: 'Zadejte platné PSČ.',
+      },
+      consent: {
+        required: 'Bez vašeho souhlasu nemůžeme pokračovat.',
       },
     },
   },

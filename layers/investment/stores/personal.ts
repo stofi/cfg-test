@@ -1,10 +1,18 @@
-import type { FormState } from '../components/form/Personal.vue'
-
 export const usePersonalStore = defineStore('personal', {
-  state: (): FormState => ({
+  state: (): PersonalSchema => ({
     fullName: '',
     birthId: '',
     citizenId: '',
   }),
+  actions: {
+    reset() {
+      this.fullName = ''
+      this.birthId = ''
+      this.citizenId = ''
+    },
+  },
+  getters: {
+    hasData: state => !!state.fullName && !!state.birthId && !!state.citizenId,
+  },
   persist: true,
 })

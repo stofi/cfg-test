@@ -3,6 +3,7 @@ const en = {
     title: 'Investment Platform',
   },
   common: {
+    ok: 'OK',
     next: 'Next',
     back: 'Back',
     submit: 'Submit',
@@ -10,11 +11,13 @@ const en = {
     confirm: 'Confirm',
     continuePrevious: 'Do you want to continue with your previous entry?',
     error: 'An error occurred. Please try again.',
+    reset: 'Start Over',
   },
   pages: {
     index: {
       title: 'Home Page',
       description: 'Invest smarter.',
+      cta: 'Start Investing',
     },
     investment: {
       title: 'Investment',
@@ -31,6 +34,14 @@ const en = {
       body: 'It seems you have an unfinished entry. Would you like to continue from where you left off?',
       confirm: 'Yes, continue',
       cancel: 'No, start over',
+    },
+    success: {
+      title: 'Thank You',
+      body: 'Your investment has been successfully submitted. We will contact you shortly.',
+    },
+    error: {
+      title: 'Error',
+      body: 'An error occurred while submitting your investment. Please try again later.',
     },
   },
   forms: {
@@ -80,10 +91,13 @@ const en = {
       zipCode: {
         label: 'ZIP Code',
       },
+      consent: {
+        label: 'I agree with processing of my personal data.',
+      },
     },
     validations: {
       amount: {
-        number: `Please enter a positive number.`,
+        number: `Please enter a valid number.`,
         min: `Please enter an amount greater than {min}.`,
         max: `Please enter an amount less than {max}.`,
       },
@@ -110,6 +124,9 @@ const en = {
       },
       zipCode: {
         length: 'Please enter a valid 5-digit ZIP code.',
+      },
+      consent: {
+        required: 'You must agree to the processing of your personal data.',
       },
     },
   },
